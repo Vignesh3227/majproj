@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: Flask-PostgreSQL
+Version: 1.1.1
+Summary: Flask extension for PostgreSQL
+Home-page: https://github.com/kashcode/flask-postgresql
+Author: Aleksandrs Kašs
+Author-email: aleksandrs.kass@gmail.com
+Platform: any
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: Flask
+Provides-Extra: dev
+Requires-Dist: pytest >=6.2 ; extra == 'dev'
+Requires-Dist: twine >=3.3.0 ; extra == 'dev'
+Requires-Dist: pytest-dotenv >=0.5.2 ; extra == 'dev'
+
+# flask-postgresql
+Flask extension for PostgreSQL

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <title>Login-Jira</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Work Sans', sans-serif;
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh;
+            background-color: #f4f5f7; 
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-sizing: border-box;
+            margin: auto; 
+        }
+
+        .navbar {
+            width: 100%; 
+            height: 60px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            padding: 0 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            box-sizing: border-box; 
+            flex-shrink: 0; 
+        }
+
+        .navbar h3 {
+            margin: 0; 
+            color: #172b4d; 
+            font-size: 1.5rem;
+        }
+
+        
+
+
+        .login-container h2 {
+            font-size: 1.8rem;
+            color: #172b4d;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #5e6c84;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #dfe1e6;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4c9aff;
+            box-shadow: 0 0 0 1px #4c9aff;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn-login {
+            background-color: #0052cc; 
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #0065ff;
+        }
+
+        .btn-login:active {
+            transform: translateY(1px);
+        }
+
+        .btn-signup {
+            background-color: transparent;
+            color: #0052cc;
+            border: 1px solid #0052cc;
+            margin-top: 0.5rem;
+        }
+
+        .btn-signup:hover {
+            background-color: #e6f4ff;
+        }
+
+        .btn-signup:active {
+            transform: translateY(1px);
+        }
+
+        .forgot-password {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a {
+            color: #0052cc;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .logo-icon { 
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-icon i {
+            font-size: 2.5rem;
+            color: #0052cc;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <div class="login-container">
+        <div class="logo-icon">
+            <i class="fab fa-jira"></i>
+        </div>
+        <h2>Log in to Jira</h2>
+
+        <form action="/base", method="post">
+            <div class="input-group">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="button" class="btn btn-login" >Log in</button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="#">Forgot your password?</a>
+        </div>
+
+        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #dfe1e6;">
+
+        <button type="button" class="btn btn-signup">Sign up for an account</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard-Jira</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --sidebar-width: 240px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Work Sans', sans-serif;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      z-index: 1000;
+    }
+
+    .left, .center, .right {
+      display: flex;
+      align-items: center;
+    }
+
+    .left {
+      flex: 1;
+      gap: 0.75rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .center {
+      flex: 2;
+      justify-content: center;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    .right {
+      flex: 1;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .profile {
+      width: 28px;
+      height: 28px;
+      background-color: teal;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .main-layout {
+      display: flex; 
+      margin-top: 60px;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 0; 
+      overflow: hidden; 
+      background-color: #f3f4f6;
+      border-right: 1px solid #e5e7eb;
+      padding: 0; 
+      transition: width 0.3s ease, padding 0.3s ease;
+      flex-shrink: 0; 
+    }
+
+    .sidebar.open {
+      width: var(--sidebar-width);
+      padding: 1rem;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 0.5rem 0;
+      color: #111827;
+      text-decoration: none;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    .sidebar a:hover {
+      background-color: #e5e7eb;
+    }
+
+    .content {
+      flex-grow: 1; 
+      padding: 1rem;
+      overflow-x: auto; 
+    }
+    .logo-icon i {
+            color: #0052cc;
+        }
+    a{
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="left">
+      <button class="icon-btn" onclick="toggleSidebar()" title="Toggle Sidebar">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="logo-icon">
+            <i class="fab fa-jira"></i>
+      <span>Jira</span>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search">
+      </div>
+    </div>
+
+    <div class="right">
+      <button class="icon-btn"><i class="fas fa-bell"></i></button>
+      <a href="{{url_for('base1')}}"><button class="profile">VN</button></a>
+    </div>
+  </div>
+
+  <div class="main-layout" id="mainLayout">
+    <div class="sidebar" id="sidebar">
+      <a href="#">For You</a>
+      <a href="#">Recent</a>
+      <a href="#">Projects</a>
+      <a href="#">Filters</a>
+      <a href="#">Teams</a>
+      <a href="#">Goals</a>
+      <a href="#">Settings</a>
+    </div>
+    {% block content %}{%endblock%}
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("open");
+    }
+  </script>
+</body>
+</html>
