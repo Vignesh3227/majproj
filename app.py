@@ -147,7 +147,7 @@ def get_user_role(user_id):
 
 def role_required(allowed_roles):
     def wrapper(fn):
-        @jwt_required()
+        
         def decorator(*args, **kwargs):
             current_user_id = get_jwt_identity()
             user_roles = get_user_role(current_user_id)
@@ -158,25 +158,22 @@ def role_required(allowed_roles):
     return wrapper
 
 class ApproveRole(Resource):
+    @jwt_required
     @role_required(["admin"])
     def post(self):
-        data = request.get_json()
-        user_id = data.get('user_id')
-        role_name = data.get('role') 
-
+        data=request.get_json()
+        user_id=data.get('user_id')
+        role_name=data.get('role') 
         role = Role.query.filter_by(roles=role_name).first()
         if not role:
             return {"message": "Invalid role"}, 400
-
         if UserRoles.query.filter_by(user_id=user_id, role_id=role.id).first():
             return {"message": "User already has this role"}, 400
-
         user_role = UserRoles(user_id=user_id, role_id=role.id)
         db.session.add(user_role)
         profile = UserProfile.query.filter_by(user_id=user_id).first()
         if profile:
             profile.status = True
-
         db.session.commit()
         return {"message": f"Role '{role_name}' assigned to user {user_id}"}, 200
 
@@ -207,7 +204,7 @@ class Login(Resource):
         return {"access_token": access_token}, 200
 
 class GenerateTicket(Resource):
-    @jwt_required()
+    
     def post(self):
         data = request.get_json()
         ticket = Ticket(
@@ -223,7 +220,7 @@ class GenerateTicket(Resource):
 
 class ProjectCreate(Resource):
     @role_required(["admin","manager"])
-    @jwt_required()
+    
     def post(self):
         current_user_id = get_jwt_identity()
         data = request.get_json()
@@ -239,7 +236,6 @@ class ProjectCreate(Resource):
 
 
 class ProjectList(Resource):
-    @jwt_required()
     def get(self):
         projects = Project.query.all()
         result = [
@@ -255,7 +251,6 @@ class ProjectList(Resource):
         return jsonify(result)
 
 class TicketList(Resource):
-    @jwt_required()
     def get(self):
         tickets = Ticket.query.all()
         result = [
@@ -273,7 +268,6 @@ class TicketList(Resource):
         return jsonify(result)
 
 class TicketDetail(Resource):
-    @jwt_required()
     def get(self, id):
         ticket = Ticket.query.get_or_404(id)
         return {
@@ -285,8 +279,7 @@ class TicketDetail(Resource):
             "project_id": ticket.project_id,
             "assignee_id": ticket.assignee_id
         }
-
-    @jwt_required()
+    
     def put(self, id):
         ticket = Ticket.query.get_or_404(id)
         data = request.get_json()
@@ -299,7 +292,7 @@ class TicketDetail(Resource):
         db.session.commit()
         return {"message": "Ticket updated successfully"}
 
-    @jwt_required()
+
     def delete(self, id):
         ticket = Ticket.query.get_or_404(id)
         db.session.delete(ticket)
@@ -307,7 +300,7 @@ class TicketDetail(Resource):
         return {"message": "Ticket deleted successfully"}
 
 class ProjectDetail(Resource):
-    @jwt_required()
+
     def get(self, id):
         project = Project.query.get_or_404(id)
         return {
@@ -318,7 +311,7 @@ class ProjectDetail(Resource):
             "status": project.status
         }
 
-    @jwt_required()
+    @role_required(["manager","admin"])
     def put(self, id):
         project = Project.query.get_or_404(id)
         data = request.get_json()
@@ -329,7 +322,8 @@ class ProjectDetail(Resource):
         db.session.commit()
         return {"message": "Project updated successfully"}
 
-    @jwt_required()
+
+    @role_required(["manager","admin"])
     def delete(self, id):
         project = Project.query.get_or_404(id)
         db.session.delete(project)
@@ -337,7 +331,6 @@ class ProjectDetail(Resource):
         return {"message": "Project deleted successfully"}
 
 class DiscussionList(Resource):
-    @jwt_required()
     def get(self):
         discussions = TicketDiscussion.query.all()
         return [{
@@ -348,7 +341,7 @@ class DiscussionList(Resource):
         } for d in discussions], 200
 
 class DiscussionCreate(Resource):
-    @jwt_required()
+
     def post(self):
         data = request.get_json()
         discussion = TicketDiscussion(
@@ -361,7 +354,7 @@ class DiscussionCreate(Resource):
         return {"message": "Comment added"}, 201
 
 class DiscussionDetail(Resource):
-    @jwt_required()
+
     def get(self, id):
         d = TicketDiscussion.query.get_or_404(id)
         return {
@@ -371,7 +364,7 @@ class DiscussionDetail(Resource):
             "message": d.message
         }
 
-    @jwt_required()
+
     def put(self, id):
         d = TicketDiscussion.query.get_or_404(id)
         data = request.get_json()
@@ -379,7 +372,6 @@ class DiscussionDetail(Resource):
         db.session.commit()
         return {"message": "Comment updated"}
 
-    @jwt_required()
     def delete(self, id):
         d = TicketDiscussion.query.get_or_404(id)
         db.session.delete(d)
@@ -387,7 +379,7 @@ class DiscussionDetail(Resource):
         return {"message": "Comment deleted"}
 
 class TaskList(Resource):
-    @role_required(["admin", "manager","developer"])
+
     def get(self):
         tasks = Tasks.query.all()
         return [{
@@ -401,6 +393,7 @@ class TaskList(Resource):
         } for t in tasks], 200
 
 class TaskCreate(Resource):
+    
     @role_required(["admin", "manager"])
     def post(self):
         data = request.get_json()
@@ -416,7 +409,7 @@ class TaskCreate(Resource):
         return {"message": "Task created successfully"}, 201
 
 class TaskDetail(Resource):
-    @jwt_required()
+    
     def get(self, id):
         task = Tasks.query.get_or_404(id)
         return {
@@ -428,8 +421,8 @@ class TaskDetail(Resource):
             "due_date": task.due_date.strftime('%Y-%m-%d'),
             "assigned_by": task.assigned_by
         }
-
-    @jwt_required()
+    @role_required(["manager","admin"])
+    
     def put(self, id):
         task = Tasks.query.get_or_404(id)
         data = request.get_json()
@@ -441,7 +434,8 @@ class TaskDetail(Resource):
         db.session.commit()
         return {"message": "Task updated successfully"}
 
-    @jwt_required()
+    @role_required(["manager","admin"])
+    
     def delete(self, id):
         task = Tasks.query.get_or_404(id)
         db.session.delete(task)
@@ -449,7 +443,7 @@ class TaskDetail(Resource):
         return {"message": "Task deleted successfully"}
 
 class SprintList(Resource):
-    @jwt_required()
+    
     def get(self):
         sprints = Sprints.query.all()
         return [{
@@ -462,6 +456,7 @@ class SprintList(Resource):
 
 class SprintCreate(Resource):
     @role_required(["admin", "manager"])
+    
     def post(self):
         data = request.get_json()
         sprint = Sprints(
@@ -475,7 +470,7 @@ class SprintCreate(Resource):
         return {"message": "Sprint created"}, 201
 
 class SprintDetail(Resource):
-    @jwt_required()
+    
     def get(self, id):
         s = Sprints.query.get_or_404(id)
         return {
@@ -486,7 +481,8 @@ class SprintDetail(Resource):
             "status": s.status
         }
 
-    @jwt_required()
+    
+    @role_required(["manager","admin"])
     def put(self, id):
         s = Sprints.query.get_or_404(id)
         data = request.get_json()
@@ -497,7 +493,8 @@ class SprintDetail(Resource):
         db.session.commit()
         return {"message": "Sprint updated"}
 
-    @jwt_required()
+    
+    @role_required(["manager","admin"])
     def delete(self, id):
         s = Sprints.query.get_or_404(id)
         db.session.delete(s)
@@ -522,7 +519,7 @@ api.add_resource(DiscussionList, "/discussions/all")
 api.add_resource(DiscussionDetail, "/discussions/<int:id>")
 api.add_resource(SprintCreate, "/sprints")
 api.add_resource(SprintList, "/sprints/all")
-api.add_resource(SprintDetail, "/sprints/<int:id>")
+api.add_resource(SprintDetail, "/sprints/<int:id>") 
 api.add_resource(ApproveRole, "/approve-role")
 
 
@@ -530,3 +527,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True,port=3000)
+
